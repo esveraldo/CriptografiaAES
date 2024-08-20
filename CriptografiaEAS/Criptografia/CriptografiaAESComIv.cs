@@ -78,3 +78,29 @@ namespace CriptografiaEAS.Criptografia
         }
     }
 }
+
+
+//public async Task<List<Produto>> BuscarPorNomeEVersaoAsync(string nome, string versao)
+//{
+//    var queryRequest = new QueryRequest
+//    {
+//        TableName = "NomeDaTabela",
+//        KeyConditionExpression = "Nome = :nome AND Versao = :versao",
+//        ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+//        {
+//            { ":nome", new AttributeValue { S = nome } },
+//            { ":versao", new AttributeValue { S = versao } }
+//        },
+//        IndexName = "NomeVersaoIndex" // Se estiver usando um GSI
+//    };
+
+//    var response = await _dynamoDBClient.QueryAsync(queryRequest);
+
+//    return response.Items.Select(item => new Produto
+//    {
+//        Nome = item["Nome"].S,
+//        Versao = item["Versao"].S,
+//        Descricao = item["Descricao"].S,
+//        Preco = decimal.Parse(item["Preco"].N)
+//    }).ToList();
+//}
