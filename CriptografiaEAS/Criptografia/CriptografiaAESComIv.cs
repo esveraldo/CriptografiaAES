@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -104,3 +105,26 @@ namespace CriptografiaEAS.Criptografia
 //        Preco = decimal.Parse(item["Preco"].N)
 //    }).ToList();
 //}
+
+
+
+
+
+// Configura as expressões de condição para a consulta
+//var keyConditionExpression = "Nome = :nome and Versao = :versao";
+//var expressionAttributeValues = new Dictionary<string, AttributeValue>
+//        {
+//            { ":nome", new AttributeValue { S = nome } },
+//            { ":versao", new AttributeValue { S = versao } }
+//        };
+
+//var queryRequest = new QueryRequest
+//{
+//    TableName = "NomeDaTabela",
+//    KeyConditionExpression = keyConditionExpression,
+//    ExpressionAttributeValues = expressionAttributeValues
+//};
+
+//var result = await _principal.QueryAsync(queryRequest);
+
+//return result;
