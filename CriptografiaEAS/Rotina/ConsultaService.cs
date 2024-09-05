@@ -19,7 +19,7 @@ namespace CriptografiaEAS.Rotina
             _httpClient = httpClient;
         }
 
-        public async Task<(bool IsValid, DateTime ValidationDate)> ConsultarCpfCnpjAsync(string cpfOuCnpj)
+        public async Task<Documento> ConsultarCpfCnpjAsync(string cpfOuCnpj)
         {
             // Remove caracteres especiais antes de consultar a API
             string cpfCnpjLimpo = RemoverCaracteresEspeciais(cpfOuCnpj);
@@ -36,9 +36,8 @@ namespace CriptografiaEAS.Rotina
             {
                 string conteudoResposta = await response.Content.ReadAsStringAsync();
 
-                // Parseia o JSON da resposta (exemplo fictício)
-                var resultado = ParseResponse(conteudoResposta);
-                return (resultado.IsValid, resultado.ValidationDate);
+                // Parseia o JSON da resposta e retorna a instância apropriada (Cpf ou Cnpj)
+                return _ = ParseResponse(cpfCnpjLimpo.Length, conteudoResposta);
             }
             else
             {
@@ -46,13 +45,17 @@ namespace CriptografiaEAS.Rotina
             }
         }
 
-        private (bool IsValid, DateTime ValidationDate) ParseResponse(string json)
+        private Documento ParseResponse(int length, string json)
         {
-            dynamic jsonResponse = JsonConvert.DeserializeObject(json);
-            bool isValid = jsonResponse.valid;
-            DateTime validationDate = jsonResponse.validationDate;
-
-            return (isValid, validationDate);
+            // Verifica se é CPF ou CNPJ e popula os dados adequados
+            if (length == 11)
+            {
+                return JsonConvert.DeserializeObject<Cpf>(json);
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<Cnpj>(json);
+            }
         }
 
         private string RemoverCaracteresEspeciais(string input)
@@ -75,7 +78,7 @@ namespace CriptografiaEAS.Rotina
             var cpfsCnpjs = LerArquivoTxt(caminhoArquivoTxt);
 
             // Cria uma lista para armazenar os resultados
-            var resultados = new List<(string CpfCnpj, bool IsValid, DateTime ValidationDate)>();
+            var resultados = new List<Documento>();
 
             // Faz a consulta para cada CPF ou CNPJ
             foreach (var cpfCnpj in cpfsCnpjs)
@@ -83,7 +86,7 @@ namespace CriptografiaEAS.Rotina
                 try
                 {
                     var resultado = await consultaService.ConsultarCpfCnpjAsync(cpfCnpj);
-                    resultados.Add((cpfCnpj, resultado.IsValid, resultado.ValidationDate));
+                    resultados.Add(resultado);
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +104,7 @@ namespace CriptografiaEAS.Rotina
             return File.ReadAllLines(caminhoArquivoTxt).ToList();
         }
 
-        private static void GravarEmExcel(string caminhoArquivoExcel, List<(string CpfCnpj, bool IsValid, DateTime ValidationDate)> resultados)
+        private static void GravarEmExcel(string caminhoArquivoExcel, List<Documento> resultados)
         {
             using (var fileStream = new FileStream(caminhoArquivoExcel, FileMode.Create, FileAccess.Write))
             using (var writer = ExcelWriterFactory.CreateWriter(fileStream))
@@ -112,17 +115,32 @@ namespace CriptografiaEAS.Rotina
                 // Cabeçalhos
                 var headerRow = sheet.CreateRow();
                 headerRow.CreateCell(0).SetValue("CPF/CNPJ");
-                headerRow.CreateCell(1).SetValue("Válido");
-                headerRow.CreateCell(2).SetValue("Data de Validação");
+                headerRow.CreateCell(1).SetValue("Código");
+                headerRow.CreateCell(2).SetValue("Descrição/Motivo");
+                headerRow.CreateCell(3).SetValue("Data");
 
                 // Preenche os dados
                 int rowIndex = 1;
                 foreach (var resultado in resultados)
                 {
                     var row = sheet.CreateRow(rowIndex);
-                    row.CreateCell(0).SetValue(resultado.CpfCnpj);
-                    row.CreateCell(1).SetValue(resultado.IsValid ? "Sim" : "Não");
-                    row.CreateCell(2).SetValue(resultado.ValidationDate.ToString("dd/MM/yyyy"));
+
+                    // Verifica se o documento é Cpf ou Cnpj para preencher corretamente
+                    if (resultado is Cpf cpf)
+                    {
+                        row.CreateCell(0).SetValue(cpf.Ni);            // CPF
+                        row.CreateCell(1).SetValue(cpf.Codigo);        // Código
+                        row.CreateCell(2).SetValue(cpf.Descricao);     // Descrição
+                        row.CreateCell(3).SetValue(string.Empty);      // Sem data para CPF
+                    }
+                    else if (resultado is Cnpj cnpj)
+                    {
+                        row.CreateCell(0).SetValue(cnpj.Ni);           // CNPJ
+                        row.CreateCell(1).SetValue(cnpj.Codigo);       // Código
+                        row.CreateCell(2).SetValue(cnpj.Motivo);       // Motivo
+                        row.CreateCell(3).SetValue(cnpj.Data);         // Data
+                    }
+
                     rowIndex++;
                 }
 
@@ -131,5 +149,4 @@ namespace CriptografiaEAS.Rotina
             }
         }
     }
-
 }
