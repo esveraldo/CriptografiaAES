@@ -38,13 +38,13 @@ namespace CriptografiaEAS.Criptografia
                 aesAlg.Key = _key;
                 aesAlg.IV = _iv;
                 aesAlg.Mode = CipherMode.CBC;
-                aesAlg.Padding = PaddingMode.PKCS7;
+                aesAlg.Padding = PaddingMode.Zeros;
 
                 using (ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV))
                 using (MemoryStream msEncrypt = new MemoryStream())
                 {
                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt, Encoding.UTF8))
                     {
                         swEncrypt.Write(plainText);
                     }
@@ -66,12 +66,12 @@ namespace CriptografiaEAS.Criptografia
                 aesAlg.Key = _key;
                 aesAlg.IV = _iv;
                 aesAlg.Mode = CipherMode.CBC;
-                aesAlg.Padding = PaddingMode.PKCS7;
+                aesAlg.Padding = PaddingMode.Zeros;
 
                 using (ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV))
                 using (MemoryStream msDecrypt = new MemoryStream(cipherTextBytes))
                 using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                using (StreamReader srDecrypt = new StreamReader(csDecrypt, Encoding.UTF8))
                 {
                     return srDecrypt.ReadToEnd();
                 }
@@ -128,3 +128,44 @@ namespace CriptografiaEAS.Criptografia
 //var result = await _principal.QueryAsync(queryRequest);
 
 //return result;
+
+
+
+
+//public string Decrypt(string cipherText)
+//{
+//    if (string.IsNullOrEmpty(cipherText))
+//        throw new ArgumentNullException(nameof(cipherText));
+
+//    // Converter a string de Base64 para bytes
+//    byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+
+//    // Verifique se a chave e o IV têm o tamanho correto
+//    if (_key == null || _key.Length != 16)  // 16 bytes para AES-128, ajustar se necessário
+//        throw new ArgumentException("A chave AES deve ter 16 bytes (128 bits).");
+
+//    if (_iv == null || _iv.Length != 16)  // O IV deve ter 16 bytes
+//        throw new ArgumentException("O vetor de inicialização (IV) deve ter 16 bytes (128 bits).");
+
+//    using (Aes aesAlg = Aes.Create())
+//    {
+//        aesAlg.Key = _key;
+//        aesAlg.IV = _iv;
+//        aesAlg.Mode = CipherMode.CBC;
+//        aesAlg.Padding = PaddingMode.Zeros;  // Continuar com PaddingMode.Zeros
+
+//        using (ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV))
+//        using (MemoryStream msDecrypt = new MemoryStream(cipherTextBytes))
+//        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+//        {
+//            byte[] decryptedBytes = new byte[cipherTextBytes.Length];
+//            int decryptedByteCount = csDecrypt.Read(decryptedBytes, 0, decryptedBytes.Length);
+
+//            // Convertendo os bytes descriptografados de volta para string UTF-8
+//            string decryptedText = Encoding.UTF8.GetString(decryptedBytes, 0, decryptedByteCount);
+
+//            // Retornando a string após remover qualquer padding adicional
+//            return decryptedText.TrimEnd('\0');
+//        }
+//    }
+//}
