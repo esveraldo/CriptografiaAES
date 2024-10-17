@@ -4,10 +4,18 @@
     providedIn: 'root'
 })
 export class CryptoService {
-    private key: Uint8Array = new Uint8Array([...]); // Substitua pela sua chave de 32 bytes (AES-256)
-    private iv: Uint8Array = new Uint8Array([...]);  // Substitua pelo seu IV de 16 bytes (tamanho de bloco AES)
+    private key: Uint8Array;
+    private iv: Uint8Array;
 
-    constructor() { }
+    constructor() {
+        // Exemplo de chave e IV em string (substitua pelos seus valores reais)
+        const keyString = 'sua-chave-secreta-de-32-bytes...';  // Deve ser uma string de 32 caracteres para AES-256
+        const ivString = 'seu-iv-de-16-bytes!';  // Deve ser uma string de 16 caracteres para o IV
+
+        // Convertendo a chave e IV de string para Uint8Array
+        this.key = this.stringToUint8Array(keyString);
+        this.iv = this.stringToUint8Array(ivString);
+    }
 
     // Método para encriptar com padding zeros
     async encrypt(plainText: string): Promise<string> {
