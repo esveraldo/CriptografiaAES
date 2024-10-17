@@ -94,6 +94,11 @@ export class CryptoService {
         }
     }
 
+    // Função auxiliar para converter string para Uint8Array
+    private stringToUint8Array(str: string): Uint8Array {
+        return new TextEncoder().encode(str);
+    }
+
     // Função auxiliar para aplicar padding de zeros
     private applyZeroPadding(text: string): string {
         const blockSize = 16;  // Tamanho do bloco AES
