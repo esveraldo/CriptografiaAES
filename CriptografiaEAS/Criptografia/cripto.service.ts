@@ -135,4 +135,30 @@ export class CryptoService {
         }
         return bytes.buffer;
     }
+
+    //ADICIONAR NO COMPONENT
+    carregarDados(): void {
+        this.contatosService.getAll().subscribe({
+            next: async (data) => {
+                // Processa cada contato e decripta os campos necessários
+                this.contatos = await Promise.all(
+                    data.map(async (contato) => {
+                        try {
+                            // Suponha que o campo 'nome' esteja cifrado e precisa ser decriptado
+                            contato.nome = await this.cryptoService.decrypt(contato.nomeCifrado);
+                            return contato;
+                        } catch (error) {
+                            console.error('Erro ao decriptar:', error);
+                            this.errorMessage = 'Erro ao decriptar os dados';
+                            return contato; // Retorna o contato mesmo que a decriptação falhe
+                        }
+                    })
+                );
+            },
+            error: (e) => {
+                console.log(e.error);
+                this.errorMessage = 'Erro ao carregar os dados';
+            }
+        });
+    }
 }
