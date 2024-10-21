@@ -74,4 +74,14 @@ export class CryptoService {
             throw new Error('O texto cifrado não está em formato Base64 válido.');
         }
     }
+
+    //Hexadecimal para ArrayBuffer(se necessário):
+    private hexToArrayBuffer(hex: string): ArrayBuffer {
+        const length = hex.length / 2;
+        const result = new Uint8Array(length);
+        for (let i = 0; i < length; i++) {
+            result[i] = parseInt(hex.substr(i * 2, 2), 16);
+        }
+        return result.buffer;
+    }
 }
