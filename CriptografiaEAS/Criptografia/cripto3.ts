@@ -64,3 +64,12 @@ private base64ToArrayBuffer(base64: string): ArrayBuffer {
     }
     return bytes.buffer;
 }
+
+
+private hexToUint8Array(hex: string): Uint8Array {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return bytes;
+}
