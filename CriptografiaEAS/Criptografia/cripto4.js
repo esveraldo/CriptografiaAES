@@ -73,3 +73,26 @@ async function decrypt(cipherText, key, iv) {
     const decoder = new TextDecoder();
     return decoder.decode(decryptedBytes);
 }
+
+
+    public string EncryptAndConvertToBase64(string plainText)
+{
+    byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+
+    using(Aes aesAlg = Aes.Create())
+    {
+        aesAlg.Key = _key;
+        aesAlg.IV = _iv;
+        aesAlg.Mode = CipherMode.CBC;
+        aesAlg.Padding = PaddingMode.Zeros;
+
+        using(ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV))
+        using(MemoryStream msEncrypt = new MemoryStream())
+        using(CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+        {
+            csEncrypt.Write(plainTextBytes, 0, plainTextBytes.Length);
+            csEncrypt.FlushFinalBlock();
+            return Convert.ToBase64String(msEncrypt.ToArray());
+        }
+    }
+}
