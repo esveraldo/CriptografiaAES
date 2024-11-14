@@ -99,10 +99,17 @@ export class AuthService {
 
     // Método para obter o token de acesso
     async getAccessToken(): Promise<string | null> {
+        const account = this.getUserInfo(); // Verifica se há um usuário autenticado
+
+        if (!account) {
+            console.warn('Nenhum usuário autenticado. É necessário fazer login.');
+            return null; // Retorna null se não houver usuário
+        }
+
         try {
             const response = await this.msalService.instance.acquireTokenSilent({
-                scopes: ['User.Read'],
-                account: this.getUserInfo(),
+                scopes: ['User.Read'], // Substitua pelos escopos necessários
+                account: account, // Passa o objeto account agora verificado
             });
             return response.accessToken;
         } catch (error) {
@@ -110,6 +117,7 @@ export class AuthService {
             return null;
         }
     }
+
 }
 
 
