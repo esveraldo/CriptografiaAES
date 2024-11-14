@@ -129,7 +129,71 @@ export class AppComponent implements OnInit {
                 < /ng-template>
 
 
+//ALTERACAO
 
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { MsalModule, MsalService, MSAL_INSTANCE, MsalInterceptor, MsalGuard, MsalBroadcastService } from '@azure/msal-angular';
+import { PublicClientApplication, InteractionType, BrowserCacheLocation } from '@azure/msal-browser';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+function MSALInstanceFactory(): PublicClientApplication {
+    return new PublicClientApplication({
+        auth: {
+            clientId: 'YOUR_CLIENT_ID', // Substitua pelo seu Client ID do Azure AD
+            authority: 'https://login.microsoftonline.com/YOUR_TENANT_ID', // Substitua pelo Tenant ID
+            redirectUri: 'http://localhost:4200' // URL de redirecionamento
+        },
+        cache: {
+            cacheLocation: BrowserCacheLocation.LocalStorage,
+            storeAuthStateInCookie: true,
+        }
+    });
+}
+
+@NgModule({
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        MsalModule.forRoot(
+            MSALInstanceFactory(), // Instância da fábrica
+            {
+                interactionType: InteractionType.Redirect, // Ou Popup, dependendo da preferência
+                authRequest: {
+                    scopes: ['User.Read'] // Scopes do Microsoft Graph
+                }
+            },
+            {
+                interactionType: InteractionType.Redirect, // Ou Popup
+                protectedResourceMap: new Map([
+                    ['https://graph.microsoft.com/v1.0/me', ['User.Read']]
+                ])
+            }
+        )
+    ],
+    providers: [
+        {
+            provide: MSAL_INSTANCE,
+            useFactory: MSALInstanceFactory
+        },
+        MsalService,
+        MsalBroadcastService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: MsalInterceptor,
+            multi: true
+        },
+        MsalGuard
+    ],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }
 
 
 
