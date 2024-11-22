@@ -187,3 +187,15 @@ export class AppRoutingModule { }
 
 
 
+    /**
+     * 
+     * production: false,
+  azureAd: {
+    instance: 'https://login.microsoftonline.com/',
+    tenant: 'your-tenant-id',
+    clientId: 'your-client-id',
+    redirectUri: 'http://localhost:4200',
+    scope: 'openid profile email',
+    responseType: 'token'
+  }
+     */
