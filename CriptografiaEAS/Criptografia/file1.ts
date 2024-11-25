@@ -199,3 +199,37 @@ export class AppRoutingModule { }
     responseType: 'token'
   }
      */
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GraphService {
+    private graphUrl = 'https://graph.microsoft.com/v1.0/me';
+
+    constructor(private http: HttpClient) { }
+
+    getUserProfile() {
+        return this.http.get(this.graphUrl);
+    }
+}
+Chame o serviço no componente para buscar mais dados do usuário:
+
+    typescript
+Copiar código
+import { GraphService } from './graph.service';
+
+constructor(private graphService: GraphService) { }
+
+getUserDetails() {
+    this.graphService.getUserProfile().subscribe(data => {
+        console.log(data);
+    });
+}
+Adicione um botão para chamar o método no HTML, se necessário:
+
+html
+Copiar código
+    < button(click)="getUserDetails()" > Carregar Dados do Perfil < /button>
