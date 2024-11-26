@@ -233,3 +233,51 @@ Adicione um botão para chamar o método no HTML, se necessário:
 html
 Copiar código
     < button(click)="getUserDetails()" > Carregar Dados do Perfil < /button>
+
+//-----------------------------------
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
+import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
+
+@NgModule({
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MsalModule.forRoot(
+            new PublicClientApplication({
+                auth: {
+                    clientId: 'your-client-id', // Substitua pelo seu Client ID
+                    authority: 'https://login.microsoftonline.com/your-tenant-id', // Substitua pelo seu Tenant ID
+                    redirectUri: 'http://localhost:4200', // URI de redirecionamento
+                },
+                cache: {
+                    cacheLocation: 'localStorage',
+                    storeAuthStateInCookie: true,
+                }
+            }),
+            {
+                interactionType: InteractionType.Redirect,
+                authRequest: {
+                    scopes: ['User.Read'], // Escopos necessários
+                }
+            },
+            {
+                interactionType: InteractionType.Redirect,
+                protectedResourceMap: new Map([
+                    ['https://graph.microsoft.com/v1.0/me', ['User.Read']]
+                ])
+            }
+        )
+    ],
+    providers: [],
+    bootstrap: [AppComponent, MsalRedirectComponent] // Inclua AppComponent e MsalRedirectComponent
+})
+export class AppModule { }
+
