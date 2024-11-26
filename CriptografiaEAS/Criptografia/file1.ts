@@ -294,3 +294,16 @@ handleRedirect() {
         }).catch(err => {
             console.error('Erro ao lidar
 
+main.ts:7 Error: The selector "app-redirect" did not match any elements
+    at DefaultDomRenderer2.selectRootElement (platform-browser.mjs:576:19)
+    at locateHostElement (core.mjs:10590:21)
+    at ComponentFactory.create (core.mjs:12134:13)
+    at ApplicationRef.bootstrap (core.mjs:25276:42)
+    at core.mjs:24936:64
+    at Array.forEach (<anonymous>)
+    at PlatformRef._moduleDoBootstrap (core.mjs:24936:44)
+    at core.mjs:24906:26
+    at _ZoneDelegate.invoke (zone.js:375:26)
+    at Object.onInvoke (core.mjs:24210:33)
+
+app.component.ts:17 Inicializando MSAL...
