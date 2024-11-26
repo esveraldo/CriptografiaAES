@@ -235,5 +235,35 @@ ngOnInit(): void {
 }
 
 
+import { Component, OnInit } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+    constructor(private msalService: MsalService) { }
+
+    ngOnInit(): void {
+        this.msalService.inProgress$.subscribe((status: InteractionStatus) => {
+            console.log('Estado de interação atual:', status);
+        });
+
+        this.msalService.instance.handleRedirectPromise()
+            .then((response) => {
+                if (response) {
+                    console.log('Redirecionamento processado:', response);
+                }
+            })
+            .catch((error) => {
+                console.error('Erro ao processar redirecionamento:', error);
+            });
+    }
+}
+
+
 
     
