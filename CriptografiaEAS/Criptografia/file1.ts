@@ -214,6 +214,26 @@ export class LoginComponent {
 ﻿
 
 
+export function MSALInstanceFactory(): PublicClientApplication {
+    console.log('Inicializando PublicClientApplication...');
+    return new PublicClientApplication({
+        auth: {
+            clientId: environment.azureAd.clientId,
+            authority: environment.azureAd.instance + environment.azureAd.tenant,
+            redirectUri: environment.azureAd.redirectUri
+        },
+        cache: {
+            cacheLocation: BrowserCacheLocation.LocalStorage,
+            storeAuthStateInCookie: true,
+        }
+    });
+}
+
+
+ngOnInit(): void {
+    console.log('MSAL Instance:', this.msalService.instance);
+}
+
 
 
     
