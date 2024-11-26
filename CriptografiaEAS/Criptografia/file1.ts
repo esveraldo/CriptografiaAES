@@ -281,3 +281,16 @@ import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 })
 export class AppModule { }
 
+ngOnInit() {
+    this.handleRedirect();
+}
+
+handleRedirect() {
+    if (!this.msalService.instance.getActiveAccount()) {
+        this.msalService.instance.handleRedirectPromise().then((response) => {
+            if (response !== null && response.account) {
+                this.msalService.instance.setActiveAccount(response.account);
+            }
+        }).catch(err => {
+            console.error('Erro ao lidar
+
