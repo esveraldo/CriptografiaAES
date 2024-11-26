@@ -154,7 +154,63 @@ BrowserAuthError: interaction_in_progress: Interaction is currently in progress.
     at asyncToGenerator.js:27:1
     at new ZoneAwarePromise (zone.js:1432:21)
     at asyncToGenerator.js:19:1
-    at StandardController.loginRedirect (StandardController.mjs:1171:12)
+    at StandardController.loginRedirect(StandardController.mjs: 1171: 12)
+
+import { Component, OnInit } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+    constructor(private msalService: MsalService) { }
+
+    ngOnInit(): void {
+        // Processa o redirecionamento antes de qualquer outra interação
+        this.msalService.instance.handleRedirectPromise().then((response) => {
+            if (response) {
+                console.log('Redirecionamento processado:', response);
+            }
+        }).catch((error) => {
+            console.error('Erro ao processar redirecionamento:', error);
+        });
+
+        // Monitora o estado de interação para evitar chamadas concorrentes
+        this.msalService.inProgress$.subscribe((status: InteractionStatus) => {
+            console.log('Estado de interação:', status);
+        });
+    }
+}
+
+import { Component } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+
+@Component({
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+    interactionInProgress = false;
+
+    constructor(private msalService: MsalService) { }
+
+    login(): void {
+        if (!this.interactionInProgress) {
+            this.interactionInProgress = true; // Marca interação como em andamento
+            this.msalService.loginRedirect().finally(() => {
+                this.interactionInProgress = false; // Libera interação após conclusão
+            });
+        } else {
+            console.log('Interação já está em andamento.');
+        }
+    }
+}
+
+
 ﻿
 
 
