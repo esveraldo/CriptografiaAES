@@ -264,6 +264,14 @@ export class AppComponent implements OnInit {
     }
 }
 
+./src/app/services/auth.service.ts:2:0-93 - Error: Module not found: Error: Package path ./dist/error/Bro
+wserAuthErrorCodes is not exported from package D:\front-seguranca-app\segurancaapp\node_modules\@azure\m
+sal-browser (see exports field in D:\front-seguranca-app\segurancaapp\node_modules\@azure\msal-browser\pa
+ckage.json)
 
+
+
+** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:
+4200/ **
 
     
