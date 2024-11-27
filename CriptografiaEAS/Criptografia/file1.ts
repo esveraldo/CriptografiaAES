@@ -206,3 +206,22 @@ ngOnInit(): void {
         console.error('Erro ao inicializar MSAL:', error);
     });
 }
+
+
+ngOnInit(): void {
+    console.log('Processando redirecionamento...');
+    this.msalService.instance.handleRedirectPromise()
+        .then((response) => {
+            if (response?.account) {
+                this.msalService.instance.setActiveAccount(response.account);
+                console.log('Usuário logado:', response.account.username);
+            }
+        })
+        .catch((error) => {
+            console.error('Erro ao processar redirecionamento:', error);
+        })
+        .finally(() => {
+            // Redefinir o estado de interação após o redirecionamento
+            this.interactionStatusService.setInteractionInProgress(false);
+        });
+}
