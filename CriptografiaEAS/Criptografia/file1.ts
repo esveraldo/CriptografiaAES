@@ -184,4 +184,25 @@ Erro ao processar redirecionamento: BrowserAuthError: uninitialized_public_clien
     at asyncToGenerator.js:27:1
     at new ZoneAwarePromise (zone.js:1432:21)
     at asyncToGenerator.js:19:1
-    at StandardController.handleRedirectPromise (StandardController.mjs:205:21)
+    at StandardController.handleRedirectPromise(StandardController.mjs: 205: 21)
+
+ngOnInit(): void {
+    console.log('Inicializando MSAL...');
+    this.msalService.instance.initialize().then(() => {
+        console.log('MSAL inicializado com sucesso.');
+
+        // Processa redirecionamento
+        this.msalService.instance.handleRedirectPromise()
+            .then((response) => {
+                if (response?.account) {
+                    this.msalService.instance.setActiveAccount(response.account);
+                    console.log('Usuário logado:', response.account.username);
+                }
+            })
+            .catch((error) => {
+                console.error('Erro ao processar redirecionamento:', error);
+            });
+    }).catch((error) => {
+        console.error('Erro ao inicializar MSAL:', error);
+    });
+}
