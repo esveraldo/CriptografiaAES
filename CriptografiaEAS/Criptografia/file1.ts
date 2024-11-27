@@ -139,3 +139,29 @@ export class GraphService {
     }
 }
 
+
+index.js:561 [webpack-dev-server] 
+Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+index.js:551 [webpack-dev-server] Trying to reconnect...
+WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
+index.js:561 [webpack-dev-server] 
+Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+index.js:551 [webpack-dev-server] Trying to reconnect...
+WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
+index.js:561 [webpack-dev-server] 
+Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+index.js:551 [webpack-dev-server] Trying to reconnect...
+WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
+index.js:561 [webpack-dev-server] 
+Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+index.js:551 [webpack-dev-server] Trying to reconnect...
+﻿
+
+Annotate performance findings
+Label items and time ranges, draw connections between items, save and share annotated traces in the Performance panel.
+
+Ignore listing improvements
+Stack trace now hides ignored frames and you can now set DevTools to ignore anonymous scripts.
+
+Get performance insights
+Experimental: Discover actionable insights right in the Performance panel, consolidated from the Lighthouse report and (soon to be deprecated) Performance insights panel.
