@@ -274,4 +274,9 @@ ckage.json)
 ** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:
 4200/ **
 
+
+  Entrar
+Estamos com problemas para fazer com que você entre.
+
+AADSTS900023: Specified tenant identifier 'loc8q~1ncgbgtkx5ootq2jr.jvvq28pathncdbfi' is neither a valid DNS name, nor a valid external domain.
     
