@@ -172,3 +172,16 @@ BrowserAuthError: interaction_in_progress: Interaction is currently in progress.
     at new ZoneAwarePromise (zone.js:1432:21)
     at asyncToGenerator.js:19:1
     at StandardController.loginRedirect (StandardController.mjs:1171:12)
+
+
+Erro ao processar redirecionamento: BrowserAuthError: uninitialized_public_client_application: You must call and await the initialize function before attempting to call any other MSAL API.  For more visit: aka.ms/msaljs/browser-errors
+    at createBrowserAuthError (BrowserAuthError.mjs:271:12)
+    at blockAPICallsBeforeInitialize (BrowserUtils.mjs:112:37)
+    at StandardController.mjs:185:38
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (asyncToGenerator.js:3:1)
+    at _next (asyncToGenerator.js:22:1)
+    at asyncToGenerator.js:27:1
+    at new ZoneAwarePromise (zone.js:1432:21)
+    at asyncToGenerator.js:19:1
+    at StandardController.handleRedirectPromise (StandardController.mjs:205:21)
