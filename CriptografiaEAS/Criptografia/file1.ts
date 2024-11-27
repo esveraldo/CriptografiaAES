@@ -140,28 +140,35 @@ export class GraphService {
 }
 
 
-index.js:561 [webpack-dev-server] 
-Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
-index.js:551 [webpack-dev-server] Trying to reconnect...
-WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
-index.js:561 [webpack-dev-server] 
-Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
-index.js:551 [webpack-dev-server] Trying to reconnect...
-WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
-index.js:561 [webpack-dev-server] 
-Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
-index.js:551 [webpack-dev-server] Trying to reconnect...
-WebSocketClient.js:16 WebSocket connection to 'ws://localhost:4200/ng-cli-ws' failed: 
-index.js:561 [webpack-dev-server] 
-Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
-index.js:551 [webpack-dev-server] Trying to reconnect...
-﻿
-
-Annotate performance findings
-Label items and time ranges, draw connections between items, save and share annotated traces in the Performance panel.
-
-Ignore listing improvements
-Stack trace now hides ignored frames and you can now set DevTools to ignore anonymous scripts.
-
-Get performance insights
-Experimental: Discover actionable insights right in the Performance panel, consolidated from the Lighthouse report and (soon to be deprecated) Performance insights panel.
+ERROR Error: Uncaught (in promise): BrowserAuthError: interaction_in_progress: Interaction is currently in progress. Please ensure that this interaction has been completed before calling an interactive API.   For more visit: aka.ms/msaljs/browser-errors
+BrowserAuthError: interaction_in_progress: Interaction is currently in progress. Please ensure that this interaction has been completed before calling an interactive API.   For more visit: aka.ms/msaljs/browser-errors
+    at createBrowserAuthError (BrowserAuthError.mjs:271:12)
+    at BrowserCacheManager.setInteractionInProgress (BrowserCacheManager.mjs:1176:45)
+    at StandardController.mjs:337:33
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (asyncToGenerator.js:3:1)
+    at _next (asyncToGenerator.js:22:1)
+    at asyncToGenerator.js:27:1
+    at new ZoneAwarePromise (zone.js:1432:21)
+    at asyncToGenerator.js:19:1
+    at StandardController.acquireTokenRedirect (StandardController.mjs:380:10)
+    at createBrowserAuthError (BrowserAuthError.mjs:271:12)
+    at BrowserCacheManager.setInteractionInProgress (BrowserCacheManager.mjs:1176:45)
+    at StandardController.mjs:337:33
+    at Generator.next (<anonymous>)
+    at asyncGeneratorStep (asyncToGenerator.js:3:1)
+    at _next (asyncToGenerator.js:22:1)
+    at asyncToGenerator.js:27:1
+    at new ZoneAwarePromise (zone.js:1432:21)
+    at asyncToGenerator.js:19:1
+    at StandardController.acquireTokenRedirect (StandardController.mjs:380:10)
+    at resolvePromise (zone.js:1214:31)
+    at resolvePromise (zone.js:1168:17)
+    at zone.js:1121:17
+    at zone.js:1137:33
+    at asyncGeneratorStep (asyncToGenerator.js:10:1)
+    at _next (asyncToGenerator.js:22:1)
+    at asyncToGenerator.js:27:1
+    at new ZoneAwarePromise (zone.js:1432:21)
+    at asyncToGenerator.js:19:1
+    at StandardController.loginRedirect (StandardController.mjs:1171:12)
