@@ -219,3 +219,25 @@ const routes: Routes = [
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+ngOnInit(): void {
+    console.log('Inicializando MSAL e processando redirecionamento...');
+    this.msalService.instance.initialize()
+        .then(() => {
+            console.log('MSAL inicializado com sucesso.');
+            this.msalService.instance.handleRedirectPromise()
+                .then((response) => {
+                    if (response?.account) {
+                        this.msalService.instance.setActiveAccount(response.account);
+                        console.log('Usuário logado:', response.account.username);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro ao processar redirecionamento:', error);
+                });
+        })
+        .catch((error) => {
+            console.error('Erro ao inicializar MSAL:', error);
+        });
+}
+}
