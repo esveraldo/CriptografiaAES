@@ -241,3 +241,46 @@ ngOnInit(): void {
         });
 }
 }
+
+
+
+                    ,
+system: {
+    loggerOptions: {
+        loggerCallback: (level, message, containsPii) => {
+            if (containsPii) return;
+            console.log(`MSAL Log [${LogLevel[level]}]: ${message}`);
+        },
+            logLevel: LogLevel.Verbose,
+                piiLoggingEnabled: false,
+      }
+}
+  });
+}
+
+ngOnInit(): void {
+    console.log('Inicializando MSAL e processando redirecionamento...');
+
+    this.msalService.instance.handleRedirectPromise()
+        .then((response) => {
+            if (response?.account) {
+                this.msalService.instance.setActiveAccount(response.account);
+                console.log('Usuário autenticado:', response.account.username);
+            } else {
+                const cachedAccount = this.msalService.instance.getAllAccounts()[0];
+                if (cachedAccount) {
+                    this.msalService.instance.setActiveAccount(cachedAccount);
+                    console.log('Conta restaurada do cache:', cachedAccount.username);
+                } else {
+                    console.log('Nenhuma conta encontrada no cache.');
+                }
+            }
+        })
+        .catch((error) => {
+            console.error('Erro ao processar redirecionamento:', error);
+        });
+}
+}
+
+console.log('Estado do Cache:', this.msalService.instance.getActiveAccount());
+console.log('Contas disponíveis:', this.msalService.instance.getAllAccounts());
