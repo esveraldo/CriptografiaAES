@@ -284,3 +284,38 @@ ngOnInit(): void {
 
 console.log('Estado do Cache:', this.msalService.instance.getActiveAccount());
 console.log('Contas disponíveis:', this.msalService.instance.getAllAccounts());
+
+
+1. Verifique as Configurações no Azure AD
+Certifique - se de que o aplicativo está configurado corretamente no Azure Active Directory(Azure AD) para permitir a persistência do cache.
+
+1.1.Redirect URI
+No portal do Azure, vá para Azure Active Directory > App registrations > Selecione seu aplicativo.
+Na aba Authentication:
+Verifique se o Redirect URI está configurado e corresponde exatamente ao que está no código:
+Para desenvolvimento: http://localhost:4200.
+Para produção: https://seu-dominio.com.
+Certifique - se de que o tipo de plataforma está definido como Single Page Application(SPA).
+1.2.Tipos de Contas Suportadas
+No registro do aplicativo, confira os tipos de contas suportadas:
+
+Single tenant(Accounts in this organizational directory only): Permite apenas contas da organização do diretório.
+    Multi - tenant(Accounts in any organizational directory): Permite contas de múltiplos diretórios do Azure AD.
+        Multi - tenant + Personal Microsoft Accounts: Permite contas de múltiplos diretórios e contas pessoais(ex.: @outlook.com, @hotmail.com).
+1.3.Permissões de API
+Certifique - se de que as permissões necessárias foram adicionadas:
+
+Na aba API Permissions, adicione as seguintes permissões:
+Microsoft Graph > Delegated permissions:
+User.Read(necessário para acessar informações do usuário).
+email, profile(se precisar de mais informações do usuário).
+Após adicionar as permissões, clique em Grant admin consent para garantir que os usuários tenham acesso.
+1.4.Configuração de Tokens
+Na aba Token configuration:
+
+Adicione os claims opcionais:
+email
+given_name
+family_name
+Certifique - se de que os ID Tokens estão habilitados:
+No arquivo Manifest, verifique se idToken está configurado como true.
