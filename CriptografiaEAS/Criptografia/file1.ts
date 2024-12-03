@@ -323,3 +323,6 @@ No arquivo Manifest, verifique se idToken está configurado como true.
 
      ! [rejected]        feature/v1.0.0 -> feature/v1.0.0 (non-fast-forward)
 error: failed to push some refs to 'https://github.com/Org-Banco-Master/seguranca-app.git'
+
+
+ERROR: failed to solve: process "/bin/sh -c npm run build:${EKS_ENV}" did not complete successfully: exit code: 127
