@@ -50,11 +50,11 @@ Erro ao processar redirecionamento: BrowserAuthError: uninitialized_public_clien
 
 
 
-3. Configuração no AppModule
-Certifique - se de que o AppModule está configurado corretamente para usar o MSAL Angular:
+3. ConfiguraÃ§Ã£o no AppModule
+Certifique - se de que o AppModule estÃ¡ configurado corretamente para usar o MSAL Angular:
 
 typescript
-Copiar código
+Copiar cÃ³digo
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -122,11 +122,11 @@ export function MSALInstanceFactory(): PublicClientApplication {
 export class AppModule { }
 4. Componente de Login
 LoginComponent
-Crie o componente de login com a lógica para gerenciar login e logout:
+Crie o componente de login com a lÃ³gica para gerenciar login e logout:
 
 Arquivo login.component.ts
 typescript
-Copiar código
+Copiar cÃ³digo
 import { Component } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 
@@ -159,7 +159,7 @@ HTML para LoginComponent
 Crie o arquivo login.component.html:
 
 html
-Copiar código
+Copiar cÃ³digo
     < div * ngIf="isLoggedIn; else notLoggedIn" >
         <h2>Bem - vindo, {{ userName }}</h2>
             < button class="btn btn-danger"(click) = "logout()" > Logout < /button>
@@ -169,11 +169,11 @@ Copiar código
                     <button class="btn btn-primary"(click) = "login()" > Login com Microsoft < /button>
                         < /ng-template>
 5. Processar Redirecionamento no AppComponent
-No AppComponent, processaremos o redirecionamento e garantiremos que a aplicação está pronta para login:
+No AppComponent, processaremos o redirecionamento e garantiremos que a aplicaÃ§Ã£o estÃ¡ pronta para login:
 
 Arquivo app.component.ts
 typescript
-Copiar código
+Copiar cÃ³digo
 import { Component, OnInit } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 
@@ -191,7 +191,7 @@ export class AppComponent implements OnInit {
             .then((response) => {
                 if (response?.account) {
                     this.msalService.instance.setActiveAccount(response.account);
-                    console.log('Usuário logado:', response.account.username);
+                    console.log('UsuÃ¡rio logado:', response.account.username);
                 }
             })
             .catch((error) => {
@@ -199,12 +199,12 @@ export class AppComponent implements OnInit {
             });
     }
 }
-6. Configuração de Rotas
+6. ConfiguraÃ§Ã£o de Rotas
 Adicione as rotas para o LoginComponent no AppRoutingModule:
 
 Arquivo app - routing.module.ts
 typescript
-Copiar código
+Copiar cÃ³digo
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -229,7 +229,7 @@ ngOnInit(): void {
                 .then((response) => {
                     if (response?.account) {
                         this.msalService.instance.setActiveAccount(response.account);
-                        console.log('Usuário logado:', response.account.username);
+                        console.log('UsuÃ¡rio logado:', response.account.username);
                     }
                 })
                 .catch((error) => {
@@ -265,7 +265,7 @@ ngOnInit(): void {
         .then((response) => {
             if (response?.account) {
                 this.msalService.instance.setActiveAccount(response.account);
-                console.log('Usuário autenticado:', response.account.username);
+                console.log('UsuÃ¡rio autenticado:', response.account.username);
             } else {
                 const cachedAccount = this.msalService.instance.getAllAccounts()[0];
                 if (cachedAccount) {
@@ -283,39 +283,43 @@ ngOnInit(): void {
 }
 
 console.log('Estado do Cache:', this.msalService.instance.getActiveAccount());
-console.log('Contas disponíveis:', this.msalService.instance.getAllAccounts());
+console.log('Contas disponÃ­veis:', this.msalService.instance.getAllAccounts());
 
 
-1. Verifique as Configurações no Azure AD
-Certifique - se de que o aplicativo está configurado corretamente no Azure Active Directory(Azure AD) para permitir a persistência do cache.
+1. Verifique as ConfiguraÃ§Ãµes no Azure AD
+Certifique - se de que o aplicativo estÃ¡ configurado corretamente no Azure Active Directory(Azure AD) para permitir a persistÃªncia do cache.
 
 1.1.Redirect URI
-No portal do Azure, vá para Azure Active Directory > App registrations > Selecione seu aplicativo.
+No portal do Azure, vÃ¡ para Azure Active Directory > App registrations > Selecione seu aplicativo.
 Na aba Authentication:
-Verifique se o Redirect URI está configurado e corresponde exatamente ao que está no código:
+Verifique se o Redirect URI estÃ¡ configurado e corresponde exatamente ao que estÃ¡ no cÃ³digo:
 Para desenvolvimento: http://localhost:4200.
-Para produção: https://seu-dominio.com.
-Certifique - se de que o tipo de plataforma está definido como Single Page Application(SPA).
+Para produÃ§Ã£o: https://seu-dominio.com.
+Certifique - se de que o tipo de plataforma estÃ¡ definido como Single Page Application(SPA).
 1.2.Tipos de Contas Suportadas
 No registro do aplicativo, confira os tipos de contas suportadas:
 
-Single tenant(Accounts in this organizational directory only): Permite apenas contas da organização do diretório.
-    Multi - tenant(Accounts in any organizational directory): Permite contas de múltiplos diretórios do Azure AD.
-        Multi - tenant + Personal Microsoft Accounts: Permite contas de múltiplos diretórios e contas pessoais(ex.: @outlook.com, @hotmail.com).
-1.3.Permissões de API
-Certifique - se de que as permissões necessárias foram adicionadas:
+Single tenant(Accounts in this organizational directory only): Permite apenas contas da organizaÃ§Ã£o do diretÃ³rio.
+    Multi - tenant(Accounts in any organizational directory): Permite contas de mÃºltiplos diretÃ³rios do Azure AD.
+        Multi - tenant + Personal Microsoft Accounts: Permite contas de mÃºltiplos diretÃ³rios e contas pessoais(ex.: @outlook.com, @hotmail.com).
+1.3.PermissÃµes de API
+Certifique - se de que as permissÃµes necessÃ¡rias foram adicionadas:
 
-Na aba API Permissions, adicione as seguintes permissões:
+Na aba API Permissions, adicione as seguintes permissÃµes:
 Microsoft Graph > Delegated permissions:
-User.Read(necessário para acessar informações do usuário).
-email, profile(se precisar de mais informações do usuário).
-Após adicionar as permissões, clique em Grant admin consent para garantir que os usuários tenham acesso.
-1.4.Configuração de Tokens
+User.Read(necessÃ¡rio para acessar informaÃ§Ãµes do usuÃ¡rio).
+email, profile(se precisar de mais informaÃ§Ãµes do usuÃ¡rio).
+ApÃ³s adicionar as permissÃµes, clique em Grant admin consent para garantir que os usuÃ¡rios tenham acesso.
+1.4.ConfiguraÃ§Ã£o de Tokens
 Na aba Token configuration:
 
 Adicione os claims opcionais:
 email
 given_name
 family_name
-Certifique - se de que os ID Tokens estão habilitados:
-No arquivo Manifest, verifique se idToken está configurado como true.
+Certifique - se de que os ID Tokens estÃ£o habilitados:
+No arquivo Manifest, verifique se idToken estÃ¡ configurado como true.
+
+
+     ! [rejected]        feature/v1.0.0 -> feature/v1.0.0 (non-fast-forward)
+error: failed to push some refs to 'https://github.com/Org-Banco-Master/seguranca-app.git'
