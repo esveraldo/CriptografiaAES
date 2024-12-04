@@ -18,5 +18,36 @@ app.module.ts:34 MSAL Log [Verbose]: [Wed, 04 Dec 2024 16:22:55 GMT] : [] : @azu
 app.module.ts:34 MSAL Log [Verbose]: [Wed, 04 Dec 2024 16:22:55 GMT] : [] : @azure/msal-browser@3.27.0 : Verbose - Emitting event to callback 0193927b-502b-7ea4-96c1-e0dce4eee54e: msal:handleRedirectEnd
 app.module.ts:34 MSAL Log [Verbose]: [Wed, 04 Dec 2024 16:22:55 GMT] : [] : @azure/msal-angular@3.1.0 : Verbose - BroadcastService - msal:handleRedirectEnd results in setting inProgress from handleRedirect to none
 app.module.ts:34 MSAL Log [Verbose]: [Wed, 04 Dec 2024 16:22:55 GMT] : [] : @azure/msal-browser@3.27.0 : Verbose - getAllAccounts called
-app.module.ts:34 MSAL Log [Verbose]: [Wed, 04 Dec 2024 16:22:55 GMT] : [] : @azure/msal-browser@3.27.0 : Verbose - BrowserCacheManager.getAccountKeys - No account keys found
+app.module.ts: 34 MSAL Log[Verbose]: [Wed, 04 Dec 2024 16: 22: 55 GMT] : [] : @azure/msal-browser@3.27.0 : Verbose - BrowserCacheManager.getAccountKeys - No account keys found
+
+import { Component, OnInit } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+import { AuthenticationResult } from '@azure/msal-browser';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+    isLoggedIn = false;
+
+    constructor(private authService: MsalService) { }
+
+    ngOnInit(): void {
+        this.authService.instance.handleRedirectPromise().then((response: AuthenticationResult | null) => {
+            if (response) {
+                this.authService.instance.setActiveAccount(response.account);
+                console.log('Autenticação concluída:', response);
+                this.isLoggedIn = true;
+            } else {
+                const account = this.authService.instance.getActiveAccount();
+                this.isLoggedIn = !!account;
+            }
+        }).catch(error => {
+            console.error('Erro ao processar o redirecionamento:', error);
+        });
+    }
+}
+
 app.component.ts:31 Nenhuma conta encontrada no cache.
