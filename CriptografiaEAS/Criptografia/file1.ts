@@ -63,3 +63,22 @@ app.component.ts: 31 Nenhuma conta encontrada no cache.
       <button (click)="login()">Login</button>
     </ng-template>
   `,
+
+
+    login() {
+    this.authService.loginRedirect();
+}
+
+logout() {
+    this.authService.logoutRedirect();
+    this.isLoggedIn = false;
+}
+
+  private updateUserStatus() {
+    const account = this.authService.instance.getActiveAccount();
+    if (account) {
+        this.isLoggedIn = true;
+        this.userName = account.name || account.username;
+    }
+}
+}
