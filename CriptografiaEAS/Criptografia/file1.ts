@@ -222,3 +222,49 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(req);
     }
 }
+
+
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class AuthService {
+    constructor(private http: HttpClient) { }
+
+    authenticate() {
+        const url = 'https://example.com/authorize';
+
+        this.http
+            .get(url, { observe: 'response', withCredentials: true })
+            .subscribe(
+                (response) => {
+                    const setCookieHeader = response.headers.get('Set-Cookie');
+                    if (setCookieHeader) {
+                        console.log('Set-Cookie:', setCookieHeader);
+
+                        // Opcional: Armazenar os cookies manualmente
+                        this.storeCookies(setCookieHeader);
+                    } else {
+                        console.error('Nenhum cookie encontrado no header Set-Cookie.');
+                    }
+                },
+                (error) => {
+                    console.error('Erro ao autenticar:', error);
+                }
+            );
+    }
+
+    private storeCookies(cookieHeader: string) {
+        const cookies = cookieHeader.split(','); // Divida os cookies caso tenha múltiplos
+        cookies.forEach((cookie) => {
+            const [nameValue] = cookie.split(';'); // Pegue apenas o nome e o valor
+            const [name, value] = nameValue.split('=');
+
+            // Armazene no document.cookie ou sessionStorage, se permitido
+            document.cookie = `${name}=${value}`;
+        });
+    }
+}
