@@ -268,3 +268,45 @@ export class AuthService {
         });
     }
 }
+
+
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class ProtectedResourceService {
+    private apiUrl = 'https://example.com/protected-resource';
+
+    constructor(private http: HttpClient) { }
+
+    getProtectedResource(): Observable<any> {
+        return this.http.get(this.apiUrl, { withCredentials: true });
+    }
+}
+
+
+import { Component, OnInit } from '@angular/core';
+import { ProtectedResourceService } from './services/protected-resource.service';
+
+@Component({
+    selector: 'app-dashboard',
+    template: `<h1>Recurso Protegido</h1>`,
+})
+export class DashboardComponent implements OnInit {
+    constructor(private resourceService: ProtectedResourceService) { }
+
+    ngOnInit(): void {
+        this.resourceService.getProtectedResource().subscribe(
+            (response) => {
+                console.log('Recurso protegido:', response);
+            },
+            (error) => {
+                console.error('Erro ao acessar recurso protegido:', error);
+            }
+        );
+    }
+}
