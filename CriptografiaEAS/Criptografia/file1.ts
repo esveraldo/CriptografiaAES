@@ -149,3 +149,34 @@ const routes: Routes = [
 ];
 
 
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+@Component({
+    selector: 'app-callback',
+    template: `<p>Autenticando...</p>`,
+})
+export class CallbackComponent implements OnInit {
+    constructor(private route: ActivatedRoute, private router: Router) { }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe((params) => {
+            const code = params['code']; // Captura o código de autorização
+            if (code) {
+                console.log('Authorization Code:', code);
+
+                // Armazene ou use o código para solicitar o token
+                this.exchangeCodeForToken(code);
+            } else {
+                console.error('Authorization code not found!');
+            }
+        });
+    }
+
+    exchangeCodeForToken(code: string) {
+        // Fazer a troca pelo token usando o código de autorização
+        console.log('Trocar o código por um token:', code);
+    }
+}
+
+
