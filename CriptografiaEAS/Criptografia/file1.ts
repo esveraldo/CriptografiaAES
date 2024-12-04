@@ -326,3 +326,180 @@ error: failed to push some refs to 'https://github.com/Org-Banco-Master/seguranc
 
 
 ERROR: failed to solve: process "/bin/sh -c npm run build:${EKS_ENV}" did not complete successfully: exit code: 127
+
+
+
+
+Configurar um HttpInterceptor para Capturar o Token:
+Crie um interceptor para capturar o header de autenticação.
+
+Exemplo de Interceptor:
+
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(req).pipe(
+            tap((event) => {
+                if (event instanceof HttpResponse) {
+                    // Capturar o header com o token ou informações de autenticação
+                    const authHeader = event.headers.get('Authorization');
+                    if (authHeader) {
+                        const token = authHeader.split(' ')[1]; // Assumindo o formato "Bearer <token>"
+                        sessionStorage.setItem('accessToken', token); // Armazenar o token
+                    }
+                }
+            })
+        );
+    }
+}
+
+No app.module.ts, adicione o interceptor como provedor:
+
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
+
+@NgModule({
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+    ],
+})
+export class AppModule { }
+
+2. Exibir o Usuário Logado
+Depois de capturar e armazenar o token, use o MsalService para obter os dados do usuário.
+
+    Exemplo:
+
+
+import { Component, OnInit } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+
+@Component({
+    selector: 'app-root',
+    template: `
+    <div *ngIf="isLoggedIn">
+      <p>Bem-vindo, {{ userName }}</p>
+      <button (click)="logout()">Logout</button>
+    </div>
+    <div *ngIf="!isLoggedIn">
+      <button (click)="login()">Login</button>
+    </div>
+  `,
+})
+export class AppComponent implements OnInit {
+    isLoggedIn = false;
+    userName = '';
+
+    constructor(private authService: MsalService) { }
+
+    ngOnInit() {
+        this.authService.instance.handleRedirectPromise().then(() => {
+            const account = this.authService.instance.getActiveAccount();
+            if (account) {
+                this.isLoggedIn = true;
+                this.userName = account.name || account.username; // Nome do usuário
+            }
+        });
+    }
+
+    login() {
+        this.authService.loginRedirect();
+    }
+
+    logout() {
+        this.authService.logoutRedirect();
+    }
+}
+
+
+Importar e Configurar MsalGuard no Módulo:
+
+import { MsalGuardConfiguration, MSAL_GUARD_CONFIG, MsalGuard } from '@azure/msal-angular';
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+    return {
+        interactionType: InteractionType.Redirect, // Tipo de interação
+        authRequest: {
+            scopes: ['user.read'], // Escopos necessários
+        },
+    };
+}
+
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    providers: [
+        {
+            provide: MSAL_GUARD_CONFIG,
+            useFactory: MSALGuardConfigFactory,
+        },
+    ],
+})
+export class AppRoutingModule { }
+
+
+4. Validação do Token
+Antes de liberar as rotas protegidas, você pode validar o token armazenado no sessionStorage.
+
+Validação Simples:
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class AuthService {
+    isAuthenticated(): boolean {
+        const token = sessionStorage.getItem('accessToken');
+        if (!token) return false;
+
+        // Opcional: Decodificar e validar o token (expiração, etc.)
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const isTokenValid = payload && new Date(payload.exp * 1000) > new Date();
+
+        return isTokenValid;
+    }
+}
+
+Usar o Serviço no Guard:
+
+
+import { Injectable } from '@angular/core';
+import { CanActivate } from '@angular/router';
+import { AuthService } from './auth.service';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class AuthGuard implements CanActivate {
+    constructor(private authService: AuthService) { }
+
+    canActivate(): boolean {
+        return this.authService.isAuthenticated();
+    }
+}
+
+5. Armazenar e Gerenciar Sessão
+Certifique - se de que:
+
+O accessToken está armazenado no sessionStorage:
+typescript
+Copiar código
+sessionStorage.setItem('accessToken', token);
+O logout limpa o sessionStorage:
+typescript
+Copiar código
+sessionStorage.clear();
+
+
+
+
