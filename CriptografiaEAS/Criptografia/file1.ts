@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
         this.authService.instance.handleRedirectPromise().then((response: AuthenticationResult | null) => {
             if (response) {
                 this.authService.instance.setActiveAccount(response.account);
-                console.log('Autenticação concluída:', response);
+                console.log('AutenticaÃ§Ã£o concluÃ­da:', response);
                 this.isLoggedIn = true;
             } else {
                 const account = this.authService.instance.getActiveAccount();
@@ -59,7 +59,7 @@ app.component.ts: 31 Nenhuma conta encontrada no cache.
     </div>
 
     <ng-template #loginTemplate>
-      <h1>Você não está logado</h1>
+      <h1>VocÃª nÃ£o estÃ¡ logado</h1>
       <button (click)="login()">Login</button>
     </ng-template>
   `,
@@ -99,7 +99,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
     </div>
 
     <ng-template #notLoggedIn>
-      <h1>Você não está logado</h1>
+      <h1>VocÃª nÃ£o estÃ¡ logado</h1>
       <button (click)="login()">Login</button>
     </ng-template>
   `,
@@ -153,7 +153,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
     </div>
 
     <ng-template #notLoggedIn>
-      <h1>Você não está logado</h1>
+      <h1>VocÃª nÃ£o estÃ¡ logado</h1>
       <button (click)="login()">Login</button>
     </ng-template>
   `,
@@ -190,3 +190,13 @@ export class LoginComponent {
         }
     }
 }
+
+
+
+
+
+Argument of type '(response: AuthenticationResult) => void' is not assignable to parameter of type '(value: AuthenticationResult | undefined) => void | PromiseLike<void>'.
+  Types of parameters 'response' and 'value' are incompatible.
+    Type 'AuthenticationResult | undefined' is not assignable to type 'AuthenticationResult'.
+      Type 'undefined' is not assignable to type 'AuthenticationResult'.
+        Type 'undefined' is not assignable to type 'AuthenticationResult'.ts(2345)
