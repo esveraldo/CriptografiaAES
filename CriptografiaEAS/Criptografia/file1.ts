@@ -50,4 +50,16 @@ export class AppComponent implements OnInit {
     }
 }
 
-app.component.ts:31 Nenhuma conta encontrada no cache.
+app.component.ts: 31 Nenhuma conta encontrada no cache.
+
+`
+    <div *ngIf="isLoggedIn; else loginTemplate">
+      <h1>Bem-vindo, {{ userName }}</h1>
+      <button (click)="logout()">Logout</button>
+    </div>
+
+    <ng-template #loginTemplate>
+      <h1>Você não está logado</h1>
+      <button (click)="login()">Login</button>
+    </ng-template>
+  `,
