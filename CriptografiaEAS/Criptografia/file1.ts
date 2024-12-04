@@ -54,3 +54,43 @@ export class LoginComponent implements OnInit {
 
 loginPopup(request ?: PopupRequest): Promise<AuthenticationResult | undefined>;
 logoutPopup(request ?: EndSessionPopupRequest): Promise<void>;
+
+import { Injectable } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
+import { AuthenticationResult } from '@azure/msal-browser';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AuthService {
+    constructor(private msalService: MsalService) { }
+
+    login(): Promise<AuthenticationResult | undefined> {
+        return this.msalService.loginPopup();
+    }
+
+    logout(): Promise<void> {
+        return this.msalService.logoutPopup();
+    }
+
+    getActiveAccount() {
+        return this.msalService.instance.getActiveAccount();
+    }
+}
+
+
+constructor(private authService: AuthService) { }
+
+login(): void {
+    this.authService.login().then((response) => {
+        if (response?.account) {
+            this.authService.setActiveAccount(response.account);
+        }
+    });
+}
+
+logout(): void {
+    this.authService.logout();
+}
+
+
