@@ -180,3 +180,12 @@ export class CallbackComponent implements OnInit {
 }
 
 
+const base64Url = idToken.split('.')[1]; // Obtém o payload do JWT
+const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+const jsonPayload = decodeURIComponent(
+    atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+);
+const decoded = JSON.parse(jsonPayload);
