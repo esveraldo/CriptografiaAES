@@ -51,3 +51,6 @@ export class LoginComponent implements OnInit {
         }
     }
 }
+
+loginPopup(request ?: PopupRequest): Promise<AuthenticationResult | undefined>;
+logoutPopup(request ?: EndSessionPopupRequest): Promise<void>;
