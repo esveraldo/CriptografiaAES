@@ -199,4 +199,22 @@ Argument of type '(response: AuthenticationResult) => void' is not assignable to
   Types of parameters 'response' and 'value' are incompatible.
     Type 'AuthenticationResult | undefined' is not assignable to type 'AuthenticationResult'.
       Type 'undefined' is not assignable to type 'AuthenticationResult'.
-        Type 'undefined' is not assignable to type 'AuthenticationResult'.ts(2345)
+    Type 'undefined' is not assignable to type 'AuthenticationResult'.ts(2345)
+
+
+login(): void {
+    this.authService.loginPopup()
+        .then((response) => {
+            if (response) {
+                console.log('Login bem-sucedido:', response);
+                this.authService.instance.setActiveAccount(response.account); // Define a conta ativa
+                this.updateUserStatus();
+            } else {
+                console.error('Nenhuma resposta retornada do login.');
+            }
+        })
+        .catch((error) => {
+            console.error('Erro durante o login:', error);
+        });
+}
+
