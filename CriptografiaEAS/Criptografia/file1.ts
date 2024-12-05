@@ -106,3 +106,8 @@ logout(): void {
                             < /div>
 
 
+        error NG5002: Unexpected closing tag "ng-template". It may happ
+en when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/sy
+ntax.html#closing-elements-that-have-implied-end-tags
+
+
