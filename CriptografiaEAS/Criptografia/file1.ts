@@ -48,3 +48,11 @@ export class LoginComponent {
         }
     }
 }
+
+
+        .no - color {
+    background - color: transparent; /* Remove a cor de fundo */
+    color: inherit; /* Usa a cor do texto do elemento pai */
+    border: none; /* Remove a borda, opcional */
+    box - shadow: none; /* Remove a sombra, opcional */
+}
