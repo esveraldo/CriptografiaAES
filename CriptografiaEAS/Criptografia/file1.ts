@@ -93,4 +93,16 @@ logout(): void {
     this.authService.logout();
 }
 
+    < div >
+    <ng-container * ngIf="isLoggedIn; else loginTemplate" >
+        <h1>Bem - vindo, {{ userName }}</h1>
+            < button(click)="logout()" > Logout < /button>
+                < /ng-container>
+
+                < ng - template #loginTemplate >
+                    <h1>Você não está logado < /h1>
+                        < button(click)="login()" > Login com a Microsoft < /button>
+                            < /ng-template>
+                            < /div>
+
 
