@@ -43,3 +43,43 @@ export class AppComponent implements OnInit {
         }
     }
 }
+
+
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { MsalRedirectComponent, MsalModule, provideMsal } from '@azure/msal-angular';
+import { PublicClientApplication } from '@azure/msal-browser';
+
+@NgModule({
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        RouterModule.forRoot([]), // Adicione suas rotas
+        MsalModule, // Adiciona o MSAL Angular ao projeto
+    ],
+    providers: [
+        provideMsal({
+            config: {
+                auth: {
+                    clientId: '<YOUR_CLIENT_ID>', // Substitua pelo ID do cliente registrado no Azure AD
+                    authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>', // Substitua pelo locatário ou use "common" para multi-tenant
+                    redirectUri: 'http://localhost:4200', // Certifique-se de que está registrado no Azure AD
+                },
+                cache: {
+                    cacheLocation: 'localStorage', // Armazena tokens no localStorage
+                    storeAuthStateInCookie: true, // Necessário para navegadores antigos
+                },
+            },
+        }),
+    ],
+    bootstrap: [AppComponent, MsalRedirectComponent], // Adicione o MsalRedirectComponent ao bootstrap
+})
+export class AppModule { }
