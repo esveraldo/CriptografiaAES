@@ -85,3 +85,36 @@ const msalConfig = {
 })
 export class AppModule { }
 
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+import { MsalRedirectComponent, MsalModule, provideMsal } from '@azure/msal-angular';
+import { PublicClientApplication } from '@azure/msal-browser';
+
+@NgModule({
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot([]),
+        HttpClientModule,
+        MsalModule,
+    ],
+    providers: [
+        provideMsal({
+            config: {
+                auth: {
+                    clientId: '<YOUR_CLIENT_ID>', // Substitua pelo ID do cliente
+                    authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>', // Substitua pelo ID do locatário
+                    redirectUri: 'http://localhost:4200', // Certifique-se de que este URI está registrado no Azure AD
+                },
+            },
+        }),
+    ],
+    bootstrap: [AppComponent, MsalRedirectComponent], // MsalRedirectComponent é necessário para o redirecionamento
+})
+export class AppModule { }
