@@ -3,8 +3,8 @@ import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { AuthenticationResult } from '@azure/msal-browser';
 
 @Component({
-  selector: 'app-root',
-  template: `
+    selector: 'app-root',
+    template: `
     <app-navbar></app-navbar>
     <div *ngIf="isLoggedIn; else notLoggedIn">
       <button class="btn no-color" (click)="logout()">Sair do sistema</button>
@@ -17,7 +17,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
     </ng-template>
     <router-outlet></router-outlet>
   `,
-  styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
     isLoggedIn = false;
@@ -26,58 +26,62 @@ export class AppComponent implements OnInit {
     constructor(private authService: MsalService) { }
 
     ngOnInit(): void {
-        this.authService.instance.initialize();
-        this.authService.instance.handleRedirectPromise().then((response: AuthenticationResult | null) => {
-            if (response) {
-                this.authService.instance.setActiveAccount(response.account);
-                console.log('Autenticação concluída:', response);
-                this.isLoggedIn = true;
-                this.userName = response.account.name || response.account.username;
-            } else {
-                const account = this.authService.instance.getActiveAccount();
-                this.isLoggedIn = !!account;
-            }
-        }).catch(error => {
-            console.error('Erro ao processar o redirecionamento:', error);
-        });
+        this.authService.instance.handleRedirectPromise()
+            .then((response: AuthenticationResult | null) => {
+                if (response) {
+                    console.log('Autenticação concluída:', response);
+                    this.authService.instance.setActiveAccount(response.account);
+                    this.isLoggedIn = true;
+                    this.userName = response.account?.name || response.account?.username;
+                } else {
+                    console.log('Nenhum resultado de redirecionamento, verificando contas ativas...');
+                    const account = this.authService.instance.getActiveAccount();
+                    if (account) {
+                        console.log('Conta ativa encontrada:', account);
+                        this.isLoggedIn = true;
+                        this.userName = account.name || account.username;
+                    } else {
+                        console.log('Nenhuma conta ativa encontrada.');
+                        this.isLoggedIn = false;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar o redirecionamento:', error);
+            });
     }
 
     login(): void {
-      
         this.authService.loginRedirect({
-          scopes: ['User.Read'],
+            scopes: ['User.Read'],
         });
-                            
-      }
-    
-        logout(): void {
-            this.authService.logoutRedirect();
-        }
+    }
+
+    logout(): void {
+        this.authService.logoutRedirect();
+    }
 }
 
 
-import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
-import { MsalModule, MsalService, MsalRedirectComponent, MsalInterceptor } from '@azure/msal-angular';
 
-export const msalConfig = {
+import { MsalModule, MsalInterceptorConfiguration, MsalGuardConfiguration } from '@azure/msal-angular';
+import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
+
+const msalConfig = {
     auth: {
-        clientId: '<YOUR_CLIENT_ID>', // Substitua pelo ID do aplicativo
-        authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>', // Substitua pelo ID do locatário
-        redirectUri: 'http://localhost:4200', // Deve ser o mesmo do portal do Azure
-    },
-    cache: {
-        cacheLocation: 'localStorage', // Use localStorage para persistir entre sessões
-        storeAuthStateInCookie: false, // Ative se necessário para navegadores antigos
-    },
+        clientId: '<YOUR_CLIENT_ID>',
+        authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>',
+        redirectUri: 'http://localhost:4200', // Certifique-se de que o redirectUri está correto
+    }
 };
 
 @NgModule({
-    declarations: [...],
     imports: [
-        MsalModule.forRoot(new PublicClientApplication(msalConfig), null, null),
+        MsalModule.forRoot(new PublicClientApplication(msalConfig), {
+            interactionType: InteractionType.Redirect,
+        })
     ],
-    providers: [...],
-    bootstrap: [AppComponent, MsalRedirectComponent],
+    providers: [],
 })
 export class AppModule { }
 
