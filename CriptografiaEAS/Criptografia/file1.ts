@@ -54,3 +54,30 @@ export class AppComponent implements OnInit {
             this.authService.logoutRedirect();
         }
 }
+
+
+import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
+import { MsalModule, MsalService, MsalRedirectComponent, MsalInterceptor } from '@azure/msal-angular';
+
+export const msalConfig = {
+    auth: {
+        clientId: '<YOUR_CLIENT_ID>', // Substitua pelo ID do aplicativo
+        authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>', // Substitua pelo ID do locatário
+        redirectUri: 'http://localhost:4200', // Deve ser o mesmo do portal do Azure
+    },
+    cache: {
+        cacheLocation: 'localStorage', // Use localStorage para persistir entre sessões
+        storeAuthStateInCookie: false, // Ative se necessário para navegadores antigos
+    },
+};
+
+@NgModule({
+    declarations: [...],
+    imports: [
+        MsalModule.forRoot(new PublicClientApplication(msalConfig), null, null),
+    ],
+    providers: [...],
+    bootstrap: [AppComponent, MsalRedirectComponent],
+})
+export class AppModule { }
+
