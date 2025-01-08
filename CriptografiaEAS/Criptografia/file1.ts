@@ -86,62 +86,17 @@ export class AppModule { }
 
 /*
 
- <form [formGroup]="formCadastroVersao" (ngSubmit)="onSubmit()">
-  <div formGroupName="appStoreUrl">
-    <label for="defaultValue">App Store URL (Default Value):</label>
-    <input
-      id="defaultValue"
-      formControlName="defaultValue"
-      class="form-control"
-      placeholder="Digite o valor padrão"
-    />
-    <div *ngIf="formCadastroVersao.get('appStoreUrl.defaultValue')?.touched && formCadastroVersao.get('appStoreUrl.defaultValue')?.invalid">
-      <small class="text-danger" *ngIf="formCadastroVersao.get('appStoreUrl.defaultValue')?.hasError('required')">
-        Este campo é obrigatório.
-      </small>
-      <small class="text-danger" *ngIf="formCadastroVersao.get('appStoreUrl.defaultValue')?.hasError('minlength')">
-        O valor deve ter no mínimo 5 caracteres.
-      </small>
-    </div>
-  </div>
-
-  <div>
-    <label for="nome">Nome:</label>
-    <input
-      id="nome"
-      formControlName="nome"
-      class="form-control"
-      placeholder="Digite o nome"
-    />
-    <div *ngIf="formCadastroVersao.get('nome')?.touched && formCadastroVersao.get('nome')?.invalid">
-      <small class="text-danger" *ngIf="formCadastroVersao.get('nome')?.hasError('required')">
-        O nome é obrigatório.
-      </small>
-    </div>
-  </div>
-
-  <div>
-    <label for="versao">Versão:</label>
-    <input
-      id="versao"
-      formControlName="versao"
-      class="form-control"
-      placeholder="Ex: 1.0.0"
-    />
-    <div *ngIf="formCadastroVersao.get('versao')?.touched && formCadastroVersao.get('versao')?.invalid">
-      <small class="text-danger" *ngIf="formCadastroVersao.get('versao')?.hasError('required')">
-        A versão é obrigatória.
-      </small>
-      <small class="text-danger" *ngIf="formCadastroVersao.get('versao')?.hasError('pattern')">
-        A versão deve estar no formato 1.0.0.
-      </small>
-    </div>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="formCadastroVersao.invalid">
-    Enviar
-  </button>
-</form>
+ <div class="col-md-3">
+                    <div formGroupName="outOfService">
+                      <label class="form-label">OutOfService. DefaultValue:</label>
+                      <textarea formControlName="defaultValue" class="form-control" rows="3"></textarea>
+                      <div *ngIf="formCadastroVersao.get('outOfService.defaultValue')?.touched && formCadastroVersao.get('outOfService.defaultValue')?.invalid">
+                        <small class="text-danger" *ngIf="formCadastroVersao.get('outOfService.defaultValue')?.hasError('required')">
+                          O campo OutOfService DefaultValue é requerido.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
 
 
 */
