@@ -1,102 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { MsalService } from '@azure/msal-angular';
-import { AuthenticationResult } from '@azure/msal-browser';
-
-@Component({
-    selector: 'app-root',
-    template: `
-    <button *ngIf="!isLoggedIn" (click)="login()">Entrar</button>
-    <button *ngIf="isLoggedIn" (click)="logout()">Sair</button>
-    <p *ngIf="isLoggedIn">Bem-vindo, {{ userName }}</p>
-  `,
-})
-export class AppComponent implements OnInit {
-    isLoggedIn = false;
-    userName: string | undefined;
-
-    constructor(private authService: MsalService) { }
-
-    ngOnInit(): void {
-        this.authService.instance.handleRedirectPromise().then((response: AuthenticationResult | null) => {
-            if (response) {
-                this.authService.instance.setActiveAccount(response.account);
-            }
-            this.setLoginState();
-        });
-    }
-
-    login(): void {
-        this.authService.loginRedirect({
-            scopes: ['User.Read'], // Substitua pelos escopos necessários
-        });
-    }
-
-    logout(): void {
-        this.authService.logoutRedirect();
-    }
-
-    private setLoginState(): void {
-        const account = this.authService.instance.getActiveAccount();
-        this.isLoggedIn = !!account;
-        if (account) {
-            this.userName = account.name || account.username;
-        }
-    }
-}
-
-
-
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-
-import { AppComponent } from './app.component';
-import { MsalRedirectComponent, MsalModule, provideMsal } from '@azure/msal-angular';
-import { PublicClientApplication } from '@azure/msal-browser';
-
-@NgModule({
-    declarations: [
-        AppComponent,
-    ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        RouterModule.forRoot([]), // Adicione suas rotas
-        MsalModule, // Adiciona o MSAL Angular ao projeto
-    ],
-    providers: [
-        provideMsal({
-            config: {
-                auth: {
-                    clientId: '<YOUR_CLIENT_ID>', // Substitua pelo ID do cliente registrado no Azure AD
-                    authority: 'https://login.microsoftonline.com/<YOUR_TENANT_ID>', // Substitua pelo locatário ou use "common" para multi-tenant
-                    redirectUri: 'http://localhost:4200', // Certifique-se de que está registrado no Azure AD
-                },
-                cache: {
-                    cacheLocation: 'localStorage', // Armazena tokens no localStorage
-                    storeAuthStateInCookie: true, // Necessário para navegadores antigos
-                },
-            },
-        }),
-    ],
-    bootstrap: [AppComponent, MsalRedirectComponent], // Adicione o MsalRedirectComponent ao bootstrap
-})
-export class AppModule { }
-
-/*
-
- <div class="col-md-3">
-                    <div formGroupName="outOfService">
-                      <label class="form-label">OutOfService. DefaultValue:</label>
-                      <textarea formControlName="defaultValue" class="form-control" rows="3"></textarea>
-                      <div *ngIf="formCadastroVersao.get('outOfService.defaultValue')?.touched && formCadastroVersao.get('outOfService.defaultValue')?.invalid">
-                        <small class="text-danger" *ngIf="formCadastroVersao.get('outOfService.defaultValue')?.hasError('required')">
-                          O campo OutOfService DefaultValue é requerido.
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-
-
-*/
+formCadastroVersao = new FormGroup({
+    enableBannerReportIncome: new FormControl('', [Validators.required]),
+    auditoriaEnabled: new FormControl('', [Validators.required]),
+    deleteNotification: new FormControl('', [Validators.required]),
+    antiEmulador: new FormControl('', [Validators.required]),
+    flutterInfosEnableIos: new FormControl('', [Validators.required]),
+    flutterSplashEnableIos: new FormControl('', [Validators.required]),
+    billetEnabled: new FormControl('', [Validators.required]),
+    enableBlockVirtualCard: new FormControl('', [Validators.required]),
+    mandatoryRegistrationEnabled: new FormControl('', [Validators.required]),
+    flutterGeralEnableIos: new FormControl('', [Validators.required]),
+    flutterBannerIrEnableIos: new FormControl('', [Validators.required]),
+    notificationEnabled: new FormControl('', [Validators.required]),
+    nationality: new FormControl('', [Validators.required]),
+    infoList: new FormControl('', [Validators.required]),
+    withdrawalInformation: new FormControl('', [Validators.required]),
+    civilGender: new FormControl('', [Validators.required]),
+    cardBenefits: new FormControl('', [Validators.required]),
+    termsList: new FormControl('', [Validators.required]),
+    editProfileEnabled: new FormControl('', [Validators.required]),
+    webContacts: new FormControl('', [Validators.required]),
+    homeConfiguration: new FormControl('', [Validators.required]),
+    physicalcardList: new FormControl('', [Validators.required]),
+    productAutocontract: new FormControl('', [Validators.required]),
+    webStoresLink: new FormControl('', [Validators.required]),
+    linkBenefits: new FormControl('', [Validators.required]),
+    phoneMetropolitan: new FormControl('', [Validators.required]),
+    accountList: new FormControl('', [Validators.required]),
+    helpPhoneNumber: new FormControl('', [Validators.required]),
+    buildAvailableMessage: new FormControl('', [Validators.required]),
+    amountPage: new FormControl('', [Validators.required]),
+    outOfServiceMessage: new FormControl('', [Validators.required]),
+    tokenActivateMessage: new FormControl('', [Validators.required]),
+    idOrigemEnvio: new FormControl('', [Validators.required]),
+    baseUrl: new FormControl('', [Validators.required]),
+    appStoreUrl: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+      ios: new FormControl('', [Validators.required]),
+      android: new FormControl('', [Validators.required]),
+    }),
+    buildMinimumRequired: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+      ios: new FormControl('', [Validators.required]),
+      android: new FormControl('', [Validators.required]),
+    }),
+    homeList: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+      web: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+    }),
+    myCardList: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+      web: new FormControl('', [Validators.required]),
+    }),
+    outOfService: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+      ios: new FormControl('', [Validators.required]),
+      android: new FormControl('', [Validators.required]),
+    }),
+    version: new FormGroup({
+      versionNumber: new FormControl('', [Validators.required]),
+      updateTime: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required]),
+      updateOrigin: new FormControl('', [Validators.required]),
+      updateType: new FormControl('', [Validators.required]),
+    }),
+    condition: new FormGroup({
+      defaultValue: new FormControl('', [Validators.required]),
+    }),
+    nome: new FormControl('', [Validators.required]),
+    versao: new FormControl('', [Validators.required]),
+  });
