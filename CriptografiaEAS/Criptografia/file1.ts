@@ -1,15 +1,3 @@
-"fileReplacements": [
-    {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.prod.ts"
-    }
-],
-    "optimization": true,
-        "outputHashing": "all",
-            "sourceMap": false,
-                "extractCss": true,
-                    "namedChunks": false,
-                        "aot": true,
-                            "extractLicenses": true,
-                                "vendorChunk": false,
-                                    "buildOptimizer": true
+https://localhost:44354/api/v1/principal/buscarporversaoenome?versao=mlb2aKRaLFXH11OpaPZtkQ%3D%3D&nome=PU1tRihimpTjpJeDI%2BhKzw%3D%3D
+
+https://localhost:44354/api/v1/principal/buscarporversaoenome?versao=mlb2aKRaLFXH11OpaPZtkQ==&nome=PU1tRihimpTjpJeDI+hKzw==
