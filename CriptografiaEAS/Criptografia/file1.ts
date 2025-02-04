@@ -140,3 +140,74 @@ export class ObterRegistrosComponent implements OnInit {
         }
     }
 }
+
+
+
+
+
+
+<div class="container mt-4" >
+
+    <!--Título -->
+        <h2 class="mb-4" > Lista de Registros < /h2>
+
+            < !--Campo de pesquisa-- >
+                <div class="input-group mb-3" >
+                    <input 
+      type="text"
+class="form-control"
+placeholder = "Pesquisar por nome..."
+[(ngModel)] = "termoDePesquisa"
+    (input) = "pesquisarTermo()"
+    >
+    </div>
+
+    < !--Tabela de registros-- >
+        <table class="table table-striped" >
+            <thead>
+            <tr>
+            <th>ID < /th>
+            < th > Nome < /th>
+            < th > Tipo < /th>
+            < th > Ações < /th>
+            < /tr>
+            < /thead>
+            < tbody >
+            <tr * ngFor="let item of visaoObterTodos" >
+                <td>{{ item.id }}</td>
+                    < td > {{ item.nome }}</td>
+                        < td > {{ item.tipo }}</td>
+                            < td >
+                            <button class="btn btn-info btn-sm me-2"(click) = "onGetById(item.id, item.tipo)" >
+                                Detalhes
+                                < /button>
+                                < button class="btn btn-danger btn-sm"(click) = "setContato(item); onDelete()" >
+                                    Excluir
+                                    < /button>
+                                    < /td>
+                                    < /tr>
+                                    < /tbody>
+                                    < /table>
+
+                                    < !--Mensagem de feedback-- >
+                                        <div * ngIf="mensagem" class="alert alert-info mt-3" > {{ mensagem }}</div>
+
+                                            < !--Paginação -->
+                                                <nav * ngIf="totalPaginas > 1" aria - label="Navegação de páginas" >
+                                                    <ul class="pagination justify-content-center mt-4" >
+                                                        <li class="page-item"[class.disabled] = "pagina === 0" >
+                                                            <button class="page-link"(click) = "mudancaDePagina(pagina - 1)" > Anterior < /button>
+                                                                < /li>
+                                                                < li
+class="page-item"
+    * ngFor="let page of [].constructor(totalPaginas); let i = index"
+    [class.active] = "pagina === i"
+        >
+        <button class="page-link"(click) = "mudancaDePagina(i)" > {{ i + 1 }}</button>
+            < /li>
+            < li class="page-item"[class.disabled] = "pagina === totalPaginas - 1" >
+                <button class="page-link"(click) = "mudancaDePagina(pagina + 1)" > Próximo < /button>
+                    < /li>
+                    < /ul>
+                    < /nav>
+                    < /div>
