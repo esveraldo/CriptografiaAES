@@ -58,3 +58,42 @@
         </ul>
     </nav>
 </div>
+
+
+
+
+<div class="container mt-4">
+    <h2>Selecione a página</h2>
+
+    <!-- Select que redireciona automaticamente -->
+    <select class="form-select" [(ngModel)]="paginaSelecionada" (change)="navegarParaPagina()">
+        <option value="/">Página Inicial</option>
+        <option value="/cadastro/credcesta">Cadastrar CredCesta</option>
+        <option value="/cadastro/mfacil">Cadastrar MFacil</option>
+    </select>
+</div>
+
+/*
+
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-seletor-pagina',
+  templateUrl: './seletor-pagina.component.html',
+  styleUrls: ['./seletor-pagina.component.css']
+})
+export class SeletorPaginaComponent {
+
+  // Página inicial é a opção padrão
+  paginaSelecionada: string = '/';
+
+  constructor(private router: Router) {}
+
+  navegarParaPagina(): void {
+    this.router.navigate([this.paginaSelecionada]);
+  }
+}
+
+
+*/
