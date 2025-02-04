@@ -211,3 +211,92 @@ class="page-item"
                     < /ul>
                     < /nav>
                     < /div>
+
+
+src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:24:85 - error TS23
+39: Property 'item' does not exist on type 'ObterRegistrosComponent'.
+
+24                         <button class="btn btn-info btn-sm me-2" (click)="onGetById(item.id, i
+tem.tipo)">
+                                                                                       ~~~~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:24:94 - error TS23
+39: Property 'item' does not exist on type 'ObterRegistrosComponent'.
+
+24                         <button class="btn btn-info btn-sm me-2" (click)="onGetById(item.id, i
+tem.tipo)">
+                                                                                                ~
+~~~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:27:83 - error TS23
+39: Property 'item' does not exist on type 'ObterRegistrosComponent'.
+
+27                         <button class="btn btn-danger btn-sm" (click)="setContato(item); onDel
+ete()">
+                                                                                     ~~~~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:44:52 - error TS23
+39: Property 'i' does not exist on type 'ObterRegistrosComponent'.
+
+44                         [class.active]="pagina === i">
+                                                      ~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:45:76 - error TS23
+39: Property 'i' does not exist on type 'ObterRegistrosComponent'.
+
+45                         <button class="page-link" (click)="mudancaDePagina(i)"> {{ i + 1 }}</b
+utton>
+                                                                              ~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+Error: src/app/components/admin/obter-registros/obter-registros.component.html:45:84 - error TS23
+39: Property 'i' does not exist on type 'ObterRegistrosComponent'.
+
+45                         <button class="page-link" (click)="mudancaDePagina(i)"> {{ i + 1 }}</b
+utton>
+                                                                                      ~
+
+  src/app/components/admin/obter-registros/obter-registros.component.ts:12:18
+    12     templateUrl: './obter-registros.component.html',
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ObterRegistrosComponent.
+
+
+
+
+× Failed to compile.
