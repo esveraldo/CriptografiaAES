@@ -7,10 +7,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Versão:</strong> {{ itemSelecionado?.versao }}</p>
+                <!-- Informações comuns -->
                 <p><strong>Nome:</strong> {{ itemSelecionado?.nome }}</p>
-                <p><strong>Tipo:</strong> {{ itemSelecionado?.tipo }}</p>
-                <p><strong>Descrição:</strong> {{ itemSelecionado?.descricao }}</p>
+                <p><strong>Versão:</strong> {{ itemSelecionado?.versao }}</p>
+
+                <!-- Informações específicas de CredCesta -->
+                <div *ngIf="itemSelecionado?.tipo === 'CredCesta'">
+                    <p><strong>Data de Criação:</strong> {{ itemSelecionado?.dataCriacao }}</p>
+                    <p><strong>Responsável:</strong> {{ itemSelecionado?.responsavel }}</p>
+                </div>
+
+                <!-- Informações específicas de MFacil -->
+                <div *ngIf="itemSelecionado?.tipo === 'MFacil'">
+                    <p><strong>Setor:</strong> {{ itemSelecionado?.setor }}</p>
+                    <p><strong>Status:</strong> {{ itemSelecionado?.status }}</p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -38,59 +49,111 @@
     </div>
 </div>
 
-/*
-
-<!-- Botão para detalhes -->
-<button class="btn btn-sm btn-outline-secondary"
-        (click)="abrirModalDetalhes(item)"
-        data-bs-toggle="modal"
-        data-bs-target="#modalVisualizacao">
-    Detalhes
-</button>
-
-<!-- Botão para editar -->
-<button class="btn btn-sm btn-outline-primary ms-2"
-        [routerLink]="['/editar-credcesta', item.id]">
-    Editar
-</button>
-
-<!-- Botão para excluir -->
-<button class="btn btn-sm btn-outline-danger ms-2"
-        (click)="abrirModalExclusao(item)"
-        data-bs-toggle="modal"
-        data-bs-target="#modalExclusao">
-    Excluir
-</button>
-
-*/
 
 /*
 
-abrirModalDetalhes(item: any): void {
-    this.itemSelecionado = item;
-  }
+import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
-  abrirModalExclusao(item: any): void {
-    this.itemSelecionado = item;
-  }
+import { ObterTodosCredCestaService } from 'src/app/services/credcesta.service';
+import { ObterTodosMFacilService } from 'src/app/services/mfacil.service';
 
-  confirmarExclusao(): void {
-    if (this.itemSelecionado.tipo === 'CredCesta') {
-      this.obterTodosCredCestaService.deleteCredCesta(this.itemSelecionado.id).subscribe(() => {
-        this.removerItemDaLista(this.itemSelecionado.id);
-      });
-    } else if (this.itemSelecionado.tipo === 'MFacil') {
-      this.obterTodosMFacilService.deleteMFacil(this.itemSelecionado.id).subscribe(() => {
-        this.removerItemDaLista(this.itemSelecionado.id);
-      });
+@Component({
+  selector: 'app-obter-registros',
+  templateUrl: './obter-registros.component.html',
+  styleUrls: ['./obter-registros.component.css']
+})
+export class ObterRegistrosComponent implements OnInit {
+
+  visaoObterTodos: Array<any>
+    = [];
+    itemSelecionado: any = null;
+    pagina: number = 0;
+    totalPaginas: number = 1;
+    mensagem: string = '';
+    termoDePesquisa: string = '';
+
+    constructor(
+    private obterTodosCredCestaService: ObterTodosCredCestaService,
+    private obterTodosMFacilService: ObterTodosMFacilService
+    ) {}
+
+    ngOnInit(): void {
+    this.carregarDados();
     }
-  }
 
-  removerItemDaLista(id: string): void {
+    carregarDados(): void {
+    forkJoin([
+    this.obterTodosCredCestaService.getAllCredCesta(),
+    this.obterTodosMFacilService.getAllMFacil()
+    ]).subscribe({
+    next: ([dadosCredCesta, dadosMFacil]) => {
+    this.visaoObterTodos = [
+    ...dadosCredCesta.map((data: any) => ({
+    ...data,
+    tipo: 'CredCesta'
+    })),
+    ...dadosMFacil.map((data: any) => ({
+    ...data,
+    tipo: 'MFacil'
+    }))
+    ];
+    this.aplicarFiltroEPaginacao();
+    },
+    error: (e) => {
+    console.error('Erro ao carregar os dados:', e);
+    }
+    });
+    }
+
+    aplicarFiltroEPaginacao(): void {
+    const filtered = this.visaoObterTodos.filter(obter =>
+    obter.nome.toLowerCase().includes(this.termoDePesquisa.toLowerCase())
+    );
+
+    this.totalPaginas = Math.ceil(filtered.length / 10);
+    const inicio = this.pagina * 10;
+    this.visaoObterTodos = filtered.slice(inicio, inicio + 10);
+    }
+
+    pesquisarTermo(): void {
+    this.pagina = 0;
+    this.aplicarFiltroEPaginacao();
+    }
+
+    mudancaDePagina(novaPagina: number): void {
+    if (novaPagina >= 0 && novaPagina < this.totalPaginas) {
+    this.pagina = novaPagina;
+    this.aplicarFiltroEPaginacao();
+    }
+    }
+
+    abrirModalDetalhes(item: any): void {
+    this.itemSelecionado = item;
+    }
+
+    abrirModalExclusao(item: any): void {
+    this.itemSelecionado = item;
+    }
+
+    confirmarExclusao(): void {
+    if (this.itemSelecionado.tipo === 'CredCesta') {
+    this.obterTodosCredCestaService.deleteCredCesta(this.itemSelecionado.id).subscribe(() => {
+    this.removerItemDaLista(this.itemSelecionado.id);
+    });
+    } else if (this.itemSelecionado.tipo === 'MFacil') {
+    this.obterTodosMFacilService.deleteMFacil(this.itemSelecionado.id).subscribe(() => {
+    this.removerItemDaLista(this.itemSelecionado.id);
+    });
+    }
+    }
+
+    removerItemDaLista(id: string): void {
     this.visaoObterTodos = this.visaoObterTodos.filter(item => item.id !== id);
     this.mensagem = `Item excluído com sucesso.`;
     this.itemSelecionado = null;
-  }
-}
+    }
+    }
 
-*/
+
+    */
