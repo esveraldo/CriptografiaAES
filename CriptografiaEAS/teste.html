@@ -1,8 +1,10 @@
-﻿<div class="container mt-4">
+<div class="container mt-4">
 
-    <h2 class="mb-4">Lista de Registros</h2>
+    <h5>Consulta de versões</h5>
+    <p>Listagem de regras de segurança</p>
+    <hr />
 
-    <!-- Campo de pesquisa -->
+
     <div class="input-group mb-3">
         <input type="text"
                class="form-control"
@@ -11,11 +13,14 @@
                (input)="pesquisarTermo()">
     </div>
 
-    <!-- Tabela de registros -->
+    <div *ngIf="visaoObterTodos.length === 0" class="alert alert-warning">
+        <p>Nenhum registro encontrado.</p>
+    </div>
+
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Versao</th>
                 <th>Nome</th>
                 <th>Tipo</th>
                 <th>Ações</th>
@@ -23,77 +28,34 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of visaoObterTodos">
-                <td>{{ item.id }}</td>
+                <td>{{ item.versao }}</td>
                 <td>{{ item.nome }}</td>
                 <td>{{ item.tipo }}</td>
                 <td>
-                    <button class="btn btn-info btn-sm me-2" (click)="onGetById(item.id, item.tipo)">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="onGetById(item.id, item.tipo)" data-bs-toggle="modal" data-bs-target="#modalVisualizacao">
                         Detalhes
                     </button>
-                    <button class="btn btn-danger btn-sm" (click)="setContato(item); onDelete()">
+                    <button class="btn btn-sm btn-outline-primary  ms-2"
+                        [routerLink]="['/editar-credcesta', item.id]">
+                        Editar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger ms-2" (click)="setContato(item);" data-bs-toggle="modal" data-bs-target="#modalExclusao">
                         Excluir
                     </button>
                 </td>
             </tr>
+            <tr>
+                <td colspan="10">
+                    <div class="pagination-controls" style="text-align: center; margin: 20px 0;;">
+                        <button class="btn btn-sm btn-outline-primary" (click)="mudancaDePagina(pagina - 1)" [disabled]="pagina === 0">Anterior</button>
+                        <span class="ms-2">Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
+                        <button class="btn btn-sm btn-outline-primary  ms-2" (click)="mudancaDePagina(pagina + 1)" [disabled]="pagina >= totalPaginas - 1">Próxima</button>
+                    </div>
+                </td>
+            </tr>
+
         </tbody>
     </table>
 
-    <!-- Mensagem de feedback -->
     <div *ngIf="mensagem" class="alert alert-info mt-3">{{ mensagem }}</div>
-
-    <!-- Paginação -->
-    <nav *ngIf="totalPaginas > 1" aria-label="Navegação de páginas">
-        <ul class="pagination justify-content-center mt-4">
-            <li class="page-item" [class.disabled]="pagina === 0">
-                <button class="page-link" (click)="mudancaDePagina(pagina - 1)">Anterior</button>
-            </li>
-            <li class="page-item"
-                *ngFor="let page of [].constructor(totalPaginas); let i = index"
-                [class.active]="pagina === i">
-                <button class="page-link" (click)="mudancaDePagina(i)"> {{ i + 1 }}</button>
-            </li>
-            <li class="page-item" [class.disabled]="pagina === totalPaginas - 1">
-                <button class="page-link" (click)="mudancaDePagina(pagina + 1)">Próximo</button>
-            </li>
-        </ul>
-    </nav>
 </div>
-
-
-
-
-<div class="container mt-4">
-    <h2>Selecione a página</h2>
-
-    <!-- Select que redireciona automaticamente -->
-    <select class="form-select" [(ngModel)]="paginaSelecionada" (change)="navegarParaPagina()">
-        <option value="/">Página Inicial</option>
-        <option value="/cadastro/credcesta">Cadastrar CredCesta</option>
-        <option value="/cadastro/mfacil">Cadastrar MFacil</option>
-    </select>
-</div>
-
-/*
-
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
-@Component({
-  selector: 'app-seletor-pagina',
-  templateUrl: './seletor-pagina.component.html',
-  styleUrls: ['./seletor-pagina.component.css']
-})
-export class SeletorPaginaComponent {
-
-  // Página inicial é a opção padrão
-  paginaSelecionada: string = '/';
-
-  constructor(private router: Router) {}
-
-  navegarParaPagina(): void {
-    this.router.navigate([this.paginaSelecionada]);
-  }
-}
-
-
-*/
