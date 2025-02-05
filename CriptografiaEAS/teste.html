@@ -1,61 +1,96 @@
-<div class="container mt-4">
-
-    <h5>Consulta de versões</h5>
-    <p>Listagem de regras de segurança</p>
-    <hr />
-
-
-    <div class="input-group mb-3">
-        <input type="text"
-               class="form-control"
-               placeholder="Pesquisar por nome..."
-               [(ngModel)]="termoDePesquisa"
-               (input)="pesquisarTermo()">
+<!-- Modal de Visualização -->
+<div class="modal fade" id="modalVisualizacao" tabindex="-1" aria-labelledby="modalVisualizacaoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVisualizacaoLabel">Detalhes da Versão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Versão:</strong> {{ itemSelecionado?.versao }}</p>
+                <p><strong>Nome:</strong> {{ itemSelecionado?.nome }}</p>
+                <p><strong>Tipo:</strong> {{ itemSelecionado?.tipo }}</p>
+                <p><strong>Descrição:</strong> {{ itemSelecionado?.descricao }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
     </div>
-
-    <div *ngIf="visaoObterTodos.length === 0" class="alert alert-warning">
-        <p>Nenhum registro encontrado.</p>
-    </div>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Versao</th>
-                <th>Nome</th>
-                <th>Tipo</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of visaoObterTodos">
-                <td>{{ item.versao }}</td>
-                <td>{{ item.nome }}</td>
-                <td>{{ item.tipo }}</td>
-                <td>
-                    <button class="btn btn-sm btn-outline-secondary" (click)="onGetById(item.id, item.tipo)" data-bs-toggle="modal" data-bs-target="#modalVisualizacao">
-                        Detalhes
-                    </button>
-                    <button class="btn btn-sm btn-outline-primary  ms-2"
-                        [routerLink]="['/editar-credcesta', item.id]">
-                        Editar
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger ms-2" (click)="setContato(item);" data-bs-toggle="modal" data-bs-target="#modalExclusao">
-                        Excluir
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="10">
-                    <div class="pagination-controls" style="text-align: center; margin: 20px 0;;">
-                        <button class="btn btn-sm btn-outline-primary" (click)="mudancaDePagina(pagina - 1)" [disabled]="pagina === 0">Anterior</button>
-                        <span class="ms-2">Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
-                        <button class="btn btn-sm btn-outline-primary  ms-2" (click)="mudancaDePagina(pagina + 1)" [disabled]="pagina >= totalPaginas - 1">Próxima</button>
-                    </div>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    <div *ngIf="mensagem" class="alert alert-info mt-3">{{ mensagem }}</div>
 </div>
+
+<!-- Modal de Exclusão -->
+<div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="modalExclusaoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExclusaoLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza de que deseja excluir o item <strong>{{ itemSelecionado?.nome }}</strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+/*
+
+<!-- Botão para detalhes -->
+<button class="btn btn-sm btn-outline-secondary"
+        (click)="abrirModalDetalhes(item)"
+        data-bs-toggle="modal"
+        data-bs-target="#modalVisualizacao">
+    Detalhes
+</button>
+
+<!-- Botão para editar -->
+<button class="btn btn-sm btn-outline-primary ms-2"
+        [routerLink]="['/editar-credcesta', item.id]">
+    Editar
+</button>
+
+<!-- Botão para excluir -->
+<button class="btn btn-sm btn-outline-danger ms-2"
+        (click)="abrirModalExclusao(item)"
+        data-bs-toggle="modal"
+        data-bs-target="#modalExclusao">
+    Excluir
+</button>
+
+*/
+
+/*
+
+abrirModalDetalhes(item: any): void {
+    this.itemSelecionado = item;
+  }
+
+  abrirModalExclusao(item: any): void {
+    this.itemSelecionado = item;
+  }
+
+  confirmarExclusao(): void {
+    if (this.itemSelecionado.tipo === 'CredCesta') {
+      this.obterTodosCredCestaService.deleteCredCesta(this.itemSelecionado.id).subscribe(() => {
+        this.removerItemDaLista(this.itemSelecionado.id);
+      });
+    } else if (this.itemSelecionado.tipo === 'MFacil') {
+      this.obterTodosMFacilService.deleteMFacil(this.itemSelecionado.id).subscribe(() => {
+        this.removerItemDaLista(this.itemSelecionado.id);
+      });
+    }
+  }
+
+  removerItemDaLista(id: string): void {
+    this.visaoObterTodos = this.visaoObterTodos.filter(item => item.id !== id);
+    this.mensagem = `Item excluído com sucesso.`;
+    this.itemSelecionado = null;
+  }
+}
+
+*/
